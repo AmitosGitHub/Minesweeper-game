@@ -1,0 +1,58 @@
+body {
+  text-align: center;
+  background-color: rgb(246, 226, 200);
+}
+
+h1 {
+  color: rgb(101, 61, 12);
+}
+
+button {
+  border: 2px solid purple;
+  border-radius: 20px;
+  width: 100px;
+  height: 35px;
+  cursor: pointer;
+  background-color: rgb(232, 162, 162);
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(235, 226, 214);
+}
+
+.levelBtn button {
+  border: 2px solid purple;
+  border-radius: 20px;
+  width: 100px;
+  height: 35px;
+  cursor: pointer;
+  padding: 10px;
+}
+.levelBtn button:hover {
+  background-color: rgb(235, 226, 214);
+}
+
+table {
+  background-color: rgb(110, 108, 105);
+  border: 2px solid rgb(30, 29, 29);
+  width: 400px;
+  height: 400px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  cursor: pointer;
+  border: 1px solid rgb(90, 24, 77);
+}
+
+table td {
+  width: 25px;
+  height: 25px;
+  border: 1px solid rgb(90, 24, 77);
+  background-color: rgb(226, 185, 222);
+}
+
+table td:hover {
+  background-color: rgb(235, 226, 214);
+  border: 1px solid rgb(90, 24, 77);
+}
