@@ -6,7 +6,7 @@ function buildBoard() {
   var levelCol = +gLevels.SIZE_COL
   var countMines = +gLevels.MINES
   var counter = 0
-  var mines = setRandMines(countMines, levelRow * levelCol)
+  var mines = setRandMines(countMines, levelRow * levelCol) //return arr
   for (var i = 0; i < levelRow; i++) {
     board.push([])
     for (var j = 0; j < levelCol; j++) {
@@ -31,10 +31,10 @@ function renderBoard(board) {
     strHTML += "\t\t<tr>\n"
 
     for (var j = 0; j < board[0].length; j++) {
-      var cell = ""
+      var cell = EMPTY
       // board[i][j].isMine === "true" ? MINES : board[i][j].minesAroundCount
       //   var className = cell ? "occupied" : ""
-      strHTML += `\t\t\t<td data-i="${i}" data-j="${j}" onclick="cellClicked(this,${i} ,${j})">${cell}</td>\n`
+      strHTML += `\t\t\t<td class="cell cell-${i}-${j}" onclick="cellClicked(this,${i} ,${j})" onmousedown="cellMarked(event,${i},${j})">${cell}</td>\n`
     }
 
     strHTML += "\t\t</tr>\n\t</tbody>"
@@ -43,41 +43,6 @@ function renderBoard(board) {
   var elBoard = document.querySelector("table")
   elBoard.innerHTML = strHTML
 }
-
-// function blowUpNeigs(cellI, cellJ) {
-//   for (var i = cellI - 1; i <= cellI + 1; i++) {
-//     if (i < 0 || i >= gBoard.length) continue
-//     for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-//       if (i === cellI && j === cellJ) continue
-//       if (j < 0 || j >= gBoard[i].length) continue
-//       if (gBoard[i][j] === LIFE) {
-//         //model
-//         gBoard[i][j] = ""
-
-//         //dom
-//         var elCell = renderCell(i, j, "")
-//         elCell.classList.remove("occupied")
-//       }
-//     }
-//   }
-// }
-
-// function renderCell(i, j, value) {
-//   var elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"]`)
-//   elCell.innerText = value
-//   return elCell
-// }
-
-// function copyMat(mat) {
-//   var newMat = []
-//   for (var i = 0; i < mat.length; i++) {
-//     newMat[i] = []
-//     for (var j = 0; j < mat[0].length; j++) {
-//       newMat[i][j] = mat[i][j]
-//     }
-//   }
-//   return newMat
-// }
 
 //-----drawNum----without 0---
 function getDrawNum() {

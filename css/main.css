@@ -56,3 +56,31 @@ table td:hover {
   background-color: rgb(235, 226, 214);
   border: 1px solid rgb(90, 24, 77);
 }
+
+.life {
+  width: 80px;
+  height: 40px;
+
+  color: red;
+  position: absolute;
+  margin-left: 10px;
+  margin-top: -560px;
+}
+
+.life1 {
+  display: block;
+}
+.life2 {
+  display: block;
+}
+.life3 {
+  display: block;
+}
+
+.modal img {
+  height: 400px;
+  margin: auto;
+  position: absolute;
+  display: none;
+  margin-top: -450px;
+}
