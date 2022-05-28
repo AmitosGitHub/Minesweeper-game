@@ -5,26 +5,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mine Sweeper</title>
+    <title>Document</title>
   </head>
   <body onload="initGame()">
     <h1>Minesweeper game</h1>
-    <div class="levelBtn">
+    <div class="levelGame">
       <button onclick="levelBeginner()">Beginner</button>
       <button onclick="levelIntermediate()">Intermediate</button>
       <button onclick="levelExpert()">Expert</button>
     </div>
+    <div class="timer">Time:<span></span></div>
+    <div class="life"></div>
     <table></table>
-    <div class="score">Time:</div>
-    <div class="modal"><img src="/img/modal.png" alt="modal" /></div>
-    <div class="life">
-      <div class="life1">❤️</div>
-      <div class="life2">❤️</div>
-      <div class="life3">❤️</div>
-    </div>
-    <button onclick="restartGame()">New Game</button>
+    <button onclick="restart()">New Game</button>
+    <div class="modal"><img class="winModal" src="img/modal.png" /></div>
+    <div class="modal"><img class="loseModal" src="img/boom.png" /></div>
+
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/rucs.js"></script>
+    <script src="js/function.js"></script>
+    <script src="js/bonus.js"></script>
   </body>
 </html>

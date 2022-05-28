@@ -2,27 +2,67 @@
 
 const MINES = "💣"
 const FLAG = "🚩"
-const NEIGHBOR_MINES1 = "①"
-const NEIGHBOR_MINES2 = "②"
-const NEIGHBOR_MINES3 = "③"
-const NEIGHBOR_MINES4 = "⓸"
 const EMPTY = ""
 
 //-----model-------
 var gBoard
 var gNums = []
 var gLevels = { SIZE_ROW: 4, SIZE_COL: 4, MINES: 2 }
-var gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 }
+var gGame = {
+  isOn: false,
+  shownCount: 0,
+  markedCount: 0,
+  secsPassed: 0,
+  minesCount: 0,
+  firstClicked: 0,
+}
+var gStartTime
+var gIntervalId
 
 function initGame() {
-  // gLevels = { SIZE_ROW: 4, SIZE_COL: 4, MINES: 2 }
-  // gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 }
   gBoard = buildBoard()
   renderBoard(gBoard)
 
   gGame.isOn = true
 }
-function getCountNeighbors(cellI, cellJ, board) {
+
+function buildBoard() {
+  var board = []
+  var row = gLevels.SIZE_ROW
+  var col = gLevels.SIZE_COL
+  var countMines = gLevels.MINES
+  var counter = 0
+  var mines = setRandMines(countMines, row * col) //return arrays
+  for (var i = 0; i < row; i++) {
+    board[i] = []
+    for (var j = 0; j < col; j++) {
+      var isMine = mines.includes(counter) ? "true" : "false"
+      board[i][j] = {
+        minesAroundCount: 0,
+        isShown: false,
+        isMine: isMine,
+        isMarked: false,
+      }
+      counter++
+    }
+  }
+  setMinesNegsCount(board)
+  return board
+}
+
+function setMinesNegsCount(board) {
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board[i].length; j++) {
+      var cell = board[i][j]
+      var countNeig = getCountNeighbors(board, i, j)
+      var item = countNeig === 0 ? EMPTY : countNeig
+      cell.minesAroundCount = item
+    }
+  }
+  return
+}
+
+function getCountNeighbors(board, cellI, cellJ) {
   var neighborsCount = 0
   for (var i = cellI - 1; i <= cellI + 1; i++) {
     if (i < 0 || i >= board.length) continue
@@ -32,23 +72,11 @@ function getCountNeighbors(cellI, cellJ, board) {
       var cell = board[i][j]
 
       if (cell.isMine === "true") {
-        neighborsCount += 1
+        neighborsCount++
       }
     }
   }
   return neighborsCount
-}
-
-function setMinesNegsCount(board) {
-  for (var i = 0; i < board.length; i++) {
-    for (var j = 0; j < board[i].length; j++) {
-      var cell = board[i][j]
-      var countNeig = getCountNeighbors(i, j, board)
-      var item = countNeig === 0 ? "" : countNeig
-      cell.minesAroundCount = item
-    }
-  }
-  return
 }
 
 function setRandMines(countMines, countCell) {
@@ -66,112 +94,24 @@ function setRandMines(countMines, countCell) {
   return mines
 }
 
-function cellClicked(elCell, cellI, cellJ) {
-  if (gBoard[cellI][cellJ].isShown === false) {
-    if (gBoard[cellI][cellJ].isMine === "true") {
-      elCell.style.backgroundColor = "red"
-      blowUp()
-      playSound()
-      // gGame.isOn = "false"
-      if (checkGameOver()) {
-        GameOver()
-      }
-    }
+function renderBoard(board) {
+  var strHTML = "\t<tbody>\n"
 
-    if (!gBoard[cellI][cellJ].minesAroundCount) {
-      openNebr(elCell, cellI, cellJ)
-    }
-    // update the Model
-    gBoard[cellI][cellJ].isShown = true
-    gGame.shownCount += 1
+  for (var i = 0; i < board.length; i++) {
+    strHTML += "\t\t<tr>\n"
 
-    // update the DOM
-    renderCell(elCell, cellI, cellJ)
-  }
+    for (var j = 0; j < board[0].length; j++) {
+      var cell = ""
+      var classCell = getClassCell(gBoard[i][j])
 
-  if (checkGameOver()) {
-    GameOver()
-  }
-}
-
-function renderCell(elCell, cellI, cellJ) {
-  var strHTML = ""
-  strHTML +=
-    gBoard[cellI][cellJ].isMine === "true"
-      ? MINES
-      : gBoard[cellI][cellJ].minesAroundCount
-  elCell.innerText = strHTML
-}
-
-function blowUp() {
-  for (var i = 0; i < gBoard.length; i++) {
-    for (var j = 0; j < gBoard[i].length; j++) {
-      var cell = gBoard[i][j]
-      if (cell.isMine === "true") {
-        //update the Model
-        cell.isShown = true
-        gGame.shownCount += 1
-        gGame.markedCount += 1
-        //update the DOM
-        var elCell = document.querySelector(`.cell-${i}-${j}`)
-        renderCell(elCell, i, j)
-      }
+      strHTML += `\t\t\t<td class="${classCell} cell-${i}-${j}" onclick="cellClicked(this,${i} ,${j})" oncontextmenu="cellMarked(this,${i} ,${j})">${cell}</td>\n`
     }
   }
+  strHTML += "\t\t</tr>\n\t</tbody>"
+  // console.log(strHTML)
+  var elBoard = document.querySelector("table")
+  elBoard.innerHTML = strHTML
 }
-
-function playSound() {
-  var sound = new Audio("audio/boom.mp3")
-  sound.play()
-}
-
-function cellMarked(ev, cellI, cellJ) {
-  var cell = gBoard[cellI][cellJ]
-
-  if (ev.button === 2) {
-    if (cell.isMarked === false) {
-      gGame.markedCount += 1
-      gGame.shownCount += 1
-      // update the Model
-      cell.isShown = true
-      cell.isMarked = true
-
-      // update the DOM
-      var elCell = document.querySelector(`.cell-${cellI}-${cellJ}`)
-      elCell.innerText = FLAG
-    } else {
-      gGame.markedCount -= 1
-      gGame.shownCount -= 1
-      // update the Model
-      cell.isShown = false
-      cell.isMarked = false
-      // update the DOM
-      var elCell = document.querySelector(`.cell-${cellI}-${cellJ}`)
-      elCell.innerText = EMPTY
-    }
-  }
-
-  if (checkGameOver()) {
-    GameOver()
-  }
-}
-
-function checkGameOver() {
-  var gameOver = "true"
-  if (gGame.isOn) {
-    var countCell = gLevels.SIZE_ROW * gLevels.SIZE_COL - gLevels.MINES
-    if (!(gGame.shownCount === countCell)) {
-      return false
-    }
-    var markedMines = gLevels.MINES
-    if (!(gGame.markedCount === markedMines)) {
-      return false
-    }
-  }
-  return gameOver
-}
-
-//  function  expandShown(board, elCell, i, j)
 
 function levelBeginner() {
   gLevels = {
@@ -200,14 +140,14 @@ function levelExpert() {
   initGame()
   return
 }
-function restartGame() {
-  gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 }
-  var elModal = document.querySelector(".modal")
-  elModal.style.display = "none"
+
+function restart() {
+  clearInterval(gIntervalId)
+  gGame.firstClicked = 0
+
+  var strTime = "00:00"
+
+  var elTime = document.querySelector(".timer span")
+  elTime.innerText = strTime
   initGame()
-}
-function GameOver() {
-  gGame.isOn = "false"
-  var elModal = document.querySelector(".modal img")
-  elModal.style.display = "block"
 }

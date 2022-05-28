@@ -6,7 +6,6 @@ body {
 h1 {
   color: rgb(101, 61, 12);
 }
-
 button {
   border: 2px solid purple;
   border-radius: 20px;
@@ -19,18 +18,7 @@ button {
 
 button:hover {
   background-color: rgb(235, 226, 214);
-}
-
-.levelBtn button {
-  border: 2px solid purple;
-  border-radius: 20px;
-  width: 100px;
-  height: 35px;
-  cursor: pointer;
-  padding: 10px;
-}
-.levelBtn button:hover {
-  background-color: rgb(235, 226, 214);
+  border: 2px solid rgb(22, 189, 111);
 }
 
 table {
@@ -57,30 +45,32 @@ table td:hover {
   border: 1px solid rgb(90, 24, 77);
 }
 
-.life {
-  width: 80px;
-  height: 40px;
-
-  color: red;
-  position: absolute;
-  margin-left: 10px;
-  margin-top: -560px;
+.empty {
+  background-color: rgb(226, 185, 222);
 }
 
-.life1 {
-  display: block;
-}
-.life2 {
-  display: block;
-}
-.life3 {
-  display: block;
+.mines {
+  background-color: rgb(226, 185, 222);
 }
 
-.modal img {
-  height: 400px;
-  margin: auto;
-  position: absolute;
+.modal {
+  width: 300px;
+  height: 300px;
+  margin-top: -350px;
+  margin-left: 100px;
   display: none;
-  margin-top: -450px;
+}
+.winModal {
+  width: 300px;
+  height: 300px;
+  margin-top: -350px;
+  margin-left: 100px;
+  display: none;
+}
+.loseModal {
+  width: 300px;
+  height: 300px;
+  margin-top: -350px;
+  margin-left: 100px;
+  display: none;
 }
